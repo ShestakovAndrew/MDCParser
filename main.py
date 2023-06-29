@@ -18,12 +18,16 @@ class GravitiCraftParserTools:
         return '\[..:..:..] \[Client thread/INFO] \[net\.minecraft\.client\.gui\.GuiNewChat]: \[CHAT] Задание: Реши пример: (\d+) \+ (\d+)'
 
     @staticmethod
-    def getRendomRegExp():
+    def getRandomRegExp():
         return '\[..:..:..] \[Client thread/INFO] \[net\.minecraft\.client\.gui\.GuiNewChat]: \[CHAT] Задание: Угадай число, число варьирует от 0 до 10!'
 
     @staticmethod
-    def getRendomAnswerRegExp():
+    def getRandomAnswerRegExp():
         return '\[..:..:..] \[Client thread/INFO] \[net\.minecraft\.client\.gui\.GuiNewChat]: \[CHAT] >>> Это было число - (\d)'
+
+    @staticmethod
+    def getRestartRegExp():
+        return '\[..:..:..] \[Client thread/INFO] \[net\.minecraft\.client\.gui\.GuiNewChat]: \[CHAT] SAY > \[CONSOLE] > Рестарт сервера через 5 секунд'
 
 class AnagrammAPI:
     @staticmethod
@@ -67,19 +71,25 @@ class GravitiCraftSolverTools:
 
     @staticmethod
     def printRandomAskLine(line):
-        match = re.match(GravitiCraftParserTools.getRendomRegExp(), line)
+        match = re.match(GravitiCraftParserTools.getRandomRegExp(), line)
         if match:
             print(line)
-            winsound.Beep(300, 200)
             winsound.Beep(300, 200)
             return line
 
     @staticmethod
     def printRandomAnswerFromLine(line):
-        match = re.match(GravitiCraftParserTools.getRendomAnswerRegExp(), line)
+        match = re.match(GravitiCraftParserTools.getRandomAnswerRegExp(), line)
         if match:
             print(line)
             winsound.Beep(300, 200)
+            return line
+
+    @staticmethod
+    def printServerRestartFromLine(line):
+        match = re.match(GravitiCraftParserTools.getRestartRegExp(), line)
+        if match:
+            print(line)
             winsound.Beep(300, 200)
             return line
 
@@ -88,10 +98,12 @@ def readFile(file):
 
     while True:
         line = file.readline()
+
         GravitiCraftSolverTools.solveNumberExampleInLine(line)
         GravitiCraftSolverTools.solveAnagramInLine(line)
         GravitiCraftSolverTools.printRandomAskLine(line)
         GravitiCraftSolverTools.printRandomAnswerFromLine(line)
+        GravitiCraftSolverTools.printServerRestartFromLine(line)
 
 def tests():
     assert GravitiCraftSolverTools.solveNumberExampleInLine(
@@ -112,7 +124,11 @@ def tests():
     ) == '[19:32:24] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] >>> Это было число - 4', \
         "Should be '[19:32:24] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] >>> Это было число - 4'"
 
+    assert GravitiCraftSolverTools.printServerRestartFromLine(
+        '[20:06:04] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] SAY > [CONSOLE] > Рестарт сервера через 5 секунд'
+    ) == '[20:06:04] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] SAY > [CONSOLE] > Рестарт сервера через 5 секунд', \
+        "Should be '[20:06:04] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] SAY > [CONSOLE] > Рестарт сервера через 5 секунд'"
+
 if __name__ == '__main__':
-    tests()
     logfile = open('C:\\Users\\Andrew\\AppData\\Roaming\\GravityCraft\\updates\\Industrial\\logs\\debug.log', "r")
     readFile(logfile)
