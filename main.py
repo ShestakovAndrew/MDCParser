@@ -71,6 +71,7 @@ class GravitiCraftSolverTools:
         if match:
             print(line)
             winsound.Beep(300, 200)
+            winsound.Beep(300, 200)
             return line
 
     @staticmethod
@@ -78,6 +79,7 @@ class GravitiCraftSolverTools:
         match = re.match(GravitiCraftParserTools.getRendomAnswerRegExp(), line)
         if match:
             print(line)
+            winsound.Beep(300, 200)
             winsound.Beep(300, 200)
             return line
 
@@ -107,7 +109,8 @@ def tests():
 
     assert GravitiCraftSolverTools.printRandomAnswerFromLine(
         '[19:32:24] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] >>> Это было число - 4'
-    ) == 'Это было число - 4', "Should be 'Это было число - 4'"
+    ) == '[19:32:24] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] >>> Это было число - 4', \
+        "Should be '[19:32:24] [Client thread/INFO] [net.minecraft.client.gui.GuiNewChat]: [CHAT] >>> Это было число - 4'"
 
 if __name__ == '__main__':
     tests()
